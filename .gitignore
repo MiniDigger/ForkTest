@@ -1,0 +1,16 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+/forky-server/build.gradle.kts
+/forky-server/src/vanilla
+/paper-server
+/fork-server
+/forky-api/build.gradle.kts
+/paper-api
+/paper-api-generator
+/fork-api
+
+.idea/
