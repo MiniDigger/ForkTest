@@ -8,8 +8,8 @@ plugins {
 
 paperweight {
     upstreams.register("fork") {
-        repo.set("/Users/jason/IdeaProjects/PaperMC/Softspoon/PatcherTest")
-        ref.set("053b9646357235734b9eba6c01da7177c48848af")
+        repo.set("https://github.com/PaperMC/paperweight-examples.git")
+        ref.set("98104f3a8b8709af8b91a63744da6a64167e9b85")
         paper = false
 
         patchFile {

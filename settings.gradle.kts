@@ -12,11 +12,5 @@ plugins {
 
 rootProject.name = "forky"
 
-val forkApiDir = file("forky-api")
-if (forkApiDir.exists()) {
-    include(forkApiDir.name)
-}
-val forkServerDir = file("forky-server")
-if (forkServerDir.exists()) {
-    include(forkServerDir.name)
-}
+include("forky-api")
+include("forky-server")
