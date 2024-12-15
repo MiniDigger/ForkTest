@@ -1,0 +1,3 @@
+[submodule "paperweight"]
+	path = paperweight
+	url = https://github.com/PaperMC/paperweight.git
