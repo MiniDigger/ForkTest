@@ -17,7 +17,7 @@
 +        forks = fork
 +        upstream.patchRepo {
 +            name = "forkPaperServer"
-+            upstreamDir = fork.flatMap { it.upstream.patchedDir("paperServer") }
++            upstreamRepo = fork.patchedRepo("paperServer")
 +            patchesDir = rootDirectory.dir("forky-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
 +        }
