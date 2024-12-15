@@ -8,19 +8,18 @@
          upstream.patchDir {
              name = "paperServer"
              upstreamPath = "paper-server"
-@@ -32,7 +_,25 @@
+@@ -32,7 +_,24 @@
          }
      }
  
 -    activeFork = fork
 +    val forky = forks.register("forky") {
 +        forks = fork
-+        upstream.patchDir {
++        upstream.patchRepo {
 +            name = "forkPaperServer"
 +            upstreamDir = fork.flatMap { it.upstream.patchedDir("paperServer") }
 +            patchesDir = rootDirectory.dir("forky-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
-+            repo = true
 +        }
 +        upstream.patchDir {
 +            name = "forkServer"
