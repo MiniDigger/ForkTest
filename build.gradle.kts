@@ -9,7 +9,7 @@ plugins {
 paperweight {
     upstreams.register("fork") {
         repo = github("PaperMC", "paperweight-examples")
-        ref = "0d49617843087cb7faaa02932af4416ba23fe22e"
+        ref = "3850c8fe78ec8b4fcbad3d0763047fe957c98ba1"
 
         patchFile {
             path = "fork-server/build.gradle.kts"
@@ -21,20 +21,17 @@ paperweight {
             outputFile = file("forky-api/build.gradle.kts")
             patchFile = file("forky-api/build.gradle.kts.patch")
         }
-        patchRepo {
-            name = "paperApi"
+        patchRepo("paperApi") {
             upstreamPath = "paper-api"
             patchesDir = file("forky-api/paper-patches")
             outputDir = file("paper-api")
         }
-        patchRepo {
-            name = "paperApiGenerator"
+        patchRepo("paperApiGenerator") {
             upstreamPath = "paper-api-generator"
             patchesDir = file("forky-api-generator/paper-patches")
             outputDir = file("paper-api-generator")
         }
-        patchDir {
-            name = "forkApi"
+        patchDir("forkApi") {
             upstreamPath = "fork-api"
             excludes = listOf("build.gradle.kts", "build.gradle.kts.patch")
             patchesDir = file("forky-api/fork-patches")
