@@ -4,6 +4,8 @@
 # Ignore Gradle build output directory
 build
 
+/run
+
 /forky-server/build.gradle.kts
 /forky-server/src/vanilla
 /paper-server
