@@ -9,7 +9,7 @@ plugins {
 paperweight {
     upstreams.register("fork") {
         repo = github("PaperMC", "paperweight-examples")
-        ref = "ecb567e07aadd27d1f74fc539bada6a1ffc614d3"
+        ref = "1e81199e6d070fec3e125d105869c6ccb9788870"
 
         patchFile {
             path = "fork-server/build.gradle.kts"

@@ -15,7 +15,7 @@
 -    activeFork = fork
 +    val forky = forks.register("forky") {
 +        forks = fork
-+        upstream.patchRepo("forkPaperServer") {
++        upstream.patchRepo("paperServer") {
 +            upstreamRepo = fork.patchedRepo("paperServer")
 +            patchesDir = rootDirectory.dir("forky-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
