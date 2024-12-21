@@ -7,7 +7,7 @@
 +        rootDirectory = upstreamsDirectory().map { it.dir("fork") }
          upstream.patchDir("paperServer") {
              upstreamPath = "paper-server"
-             excludes = setOf("src/vanilla", "patches", "build.gradle.kts")
+             excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
 @@ -29,7 +_,22 @@
          }
      }
@@ -22,7 +22,7 @@
 +        }
 +        upstream.patchDir("forkServer") {
 +            upstreamPath = "fork-server"
-+            excludes = setOf("src/vanilla", "paper-patches", "vanilla-patches", "build.gradle.kts", "build.gradle.kts.patch")
++            excludes = setOf("src/minecraft", "paper-patches", "minecraft-patches", "build.gradle.kts", "build.gradle.kts.patch")
 +            patchesDir = rootDirectory.dir("forky-server/fork-patches")
 +            outputDir = rootDirectory.dir("fork-server")
 +        }

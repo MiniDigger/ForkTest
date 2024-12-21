@@ -7,7 +7,7 @@ build
 /run
 
 /forky-server/build.gradle.kts
-/forky-server/src/vanilla
+/forky-server/src/minecraft
 /paper-server
 /fork-server
 /forky-api/build.gradle.kts
