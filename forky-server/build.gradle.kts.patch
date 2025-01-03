@@ -1,6 +1,6 @@
 --- a/fork-server/build.gradle.kts
 +++ b/fork-server/build.gradle.kts
-@@ -21,6 +_,7 @@
+@@ -22,6 +_,7 @@
      // gitFilePatches = true
  
      val fork = forks.register("fork") {
@@ -8,7 +8,7 @@
          upstream.patchDir("paperServer") {
              upstreamPath = "paper-server"
              excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
-@@ -29,7 +_,22 @@
+@@ -30,7 +_,22 @@
          }
      }
  
@@ -32,7 +32,7 @@
  
      paper {
          paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
-@@ -119,10 +_,14 @@
+@@ -120,10 +_,14 @@
      main {
          java { srcDir("../paper-server/src/main/java") }
          resources { srcDir("../paper-server/src/main/resources") }
@@ -48,11 +48,11 @@
  }
  
 @@ -147,7 +_,7 @@
- // Paper end - configure mockito agent that is needed in newer java versions
+ }
  
  dependencies {
 -    implementation(project(":fork-api"))
 +    implementation(project(":forky-api"))
-     implementation("ca.spottedleaf:concurrentutil:0.0.2") // Paper - Add ConcurrentUtil dependency
-     // Paper start
+     implementation("ca.spottedleaf:concurrentutil:0.0.2")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
+     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21

@@ -3,13 +3,13 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java // TODO java launcher tasks
-    id("io.papermc.paperweight.patcher") version "2.0.0-beta.8"
+    id("io.papermc.paperweight.patcher") version "2.0.0-beta.11"
 }
 
 paperweight {
     upstreams.register("fork") {
         repo = github("PaperMC", "paperweight-examples")
-        ref = "07763ce642eb166043ab1acc34cbee91a80976f7"
+        ref = providers.gradleProperty("forkRef")
 
         patchFile {
             path = "fork-server/build.gradle.kts"

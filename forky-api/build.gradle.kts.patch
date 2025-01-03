@@ -1,6 +1,6 @@
 --- a/fork-api/build.gradle.kts
 +++ b/fork-api/build.gradle.kts
-@@ -106,17 +_,21 @@
+@@ -104,17 +_,21 @@
          java {
              srcDir(generatedApiPath)
              srcDir(file("../paper-api/src/main/java"))
