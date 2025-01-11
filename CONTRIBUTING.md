@@ -86,17 +86,25 @@ by the individual feature-patch commits.
 This is done by simply making the appropriate changes and rebuilding the file with:
 - `./gradlew rebuildPaperSingleFilePatches`
 
-## Modifying (per-file) Minecraft patches
+## Creating and modifying (per-file) Minecraft patches
 
-This is generally what you need to do when editing Minecraft files. Updating our
-per-file patches is as easy as:
+This is generally what you need to do when editing Minecraft files. 
+Making per-file patches is as easy as:
 1. Making your changes;
 2. Running `./gradlew fixupSourcePatches` in the root directory;
-3. If nothing went wrong, rebuilding patches with `./gradlew rebuildAllServerPatches`;
+3. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftSourcePatches`;
 
-## Modifying (per-file) Paper API patches
+## Creating and modifying (per-file) Paper-Server patches
 
-This is generally what you need to do when you make small changes in the existing API implementation
+This is generally what you need to do when editing `paper-server` files.
+Making per-file patches is as easy as:
+1. Making your changes;
+2. Running `./gradlew fixupPaperServerFilePatches` in the root directory;
+3. If nothing went wrong, rebuilding patches with `./gradlew rebuildPaperServerFilePatches`;
+
+## Creating and modifying (per-file) Paper API patches
+
+This is generally what you need to do when you make small changes in the existing API.
 1. Cd into the `paper-api/src/main/java`
 2. Make your changes
 3. Run `./gradlew fixupPaperApiFilePatches`
@@ -168,7 +176,7 @@ fixup method.
 
 #### Manual method
 
-#### In order to run `git rebase -i base` you have to be in the java source directory and not in the root server/api dir!
+**In order to run `git rebase -i base` you have to be in the java source directory and not in the root server/api dir!**
 1. Make your changes;
 1. Make a temporary commit. You don't need to make a message for this;
 1. Type `git rebase -i base`, move (cut) your temporary commit and
@@ -198,76 +206,66 @@ fixup method.
 1. Run `./gradlew rebuildAllServerPatches` in the root directory, for api replace with `./gradlew rebuildPaperApiPatches`. This will modify the
    appropriate patches based on your commits.
 
-## Formatting
 
-All modifications to Vanilla files should be marked. For historical reasons,
-API and API-implementation contain a lot of these too, but they are no longer
-required, however it's up to your judgment if you want to still keep them as it can make mainteinance easier on your end.
+## Tasks list
 
-- You need to add a comment with a short and identifiable description of the patch:
-  `// Fork start - <COMMIT DESCRIPTION>`
-    - The comments should generally be about the reason the change was made, what
-      it was before, or what the change is.
-    - After the general commit description, you can add additional information either
-      after a `;` or in the next line.
-- Multi-line changes start with `// Paper Fork - <COMMIT DESCRIPTION>` and end
-  with `// Fork end - <COMMIT DESCRIPTION>`.
-- One-line changes should have `// Fork - <COMMIT DESCRIPTION>` at the end of the line.
+#### General tasks
+- `applyAllPatches` - Applies all patches
+- `applyPaperPatches` - Applies all paperApi, paperApiGenerator, paper single file patches
+- `applyPaperSingleFilePatches` - Applies all paper single-file patches
+- `applyPaperFilePatches` - Applies all paperApi, paperApiGenerator, paper per-file patches
+- `applyPaperFeaturePatches` - Applies all paperApi, paperApiGenerator, paper feature patches
 
-> [!NOTE] These comments are incredibly important to be able to keep track of changes
-> across files and to remember what they are for, even a decade into the future.
+#### Server tasks
+*Rebuilding*
+- `rebuildAllServerPatches` - rebuilds all patches (both paper and minecraft)
+- `rebuildPaperServerPatches` - to only rebuild patches made to the `paper-server` source set
+- `rebuildPaperServerFeaturePatches` - the same as above but only feature patches
+- `rebuildPaperServerFilePatches` - the same just for per-file changes
+- `rebuildMinecraftFeaturePatches` - rebuilds all minecraft feature patches
+- `rebuildMinecraftSourcePatches` - rebuilds all minecraft source patches
+- `rebuildAllServerFeaturePatches` - this is used to rebuild all feature patches 
+- `rebuildAllServerFilePatches` - used to rebuild all per-file patches but not feature patches
 
-Here's an example of how to mark changes by Paper:
+*Applying*
+- `applyAllServerPatches` - applies all patches (both paper and minecraft)
+- `applyPaperServerPatches` - to only apply patches made to the `paper-server` source set
+- `applyPaperServerFeaturePatches` - the same as above but only feature patches
+- `applyPaperServerFilePatches` - the same just for per-file changes
+- `applyMinecraftFeaturePatches` - applies all minecraft feature patches
+- `applyMinecraftSourcePatches` - applies all minecraft source patches
+- `applyAllServerFeaturePatches` - this is used to apply all feature patches 
+- `applyAllServerFilePatches` - used to apply all per-file patches but not feature patches
 
-```java
-entity.getWorld().dontBeStupid(); // Fork - Move away from beStupid()
-entity.getFriends().forEach(Entity::explode);
-entity.updateFriends();
+*Making per-file patches*
+- `fixupMinecraftSourcePatches` - for making per-file patches for minecraft sources
+- `fixupPaperServerFilePatches` - for making per-file patches for the paper source dir
 
-// Fork start - Use plugin-set spawn
-// entity.getWorld().explode(entity.getWorld().getSpawn());
-Location spawnLocation = ((CraftWorld) entity.getWorld()).getSpawnLocation();
-entity.getWorld().explode(new BlockPosition(spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ()));
-// Fork end - Use plugin-set spawn
-```
+#### API tasks
+*Rebuilding*
+- `rebuildPaperApiPatches` - rebuilds all patches made to `paper-api`
 
-We generally follow the usual Java style (aka. Oracle style), or what is programmed
-into most IDEs and formatters by default. There are a few notes, however:
-- It is fine to go over 80 lines as long as it doesn't hurt readability.  
-There are exceptions, especially in Spigot-related files
-- When in doubt or the code around your change is in a clearly different style,
-use the same style as the surrounding code.
-- Usage of the `var` keyword is discouraged, as it makes reading patch files a
-lot harder and can lead to confusion during updates due to changed return types.
-The only exception to this is if a line would otherwise be way too long/filled with
-hard to parse generics in a case where the base type itself is already obvious.
+*Applying*
+- `applyPaperApiPatches` - applies all patches made to `paper-api`
+- `applyPaperFeaturePatches` - the same as above but only feature patches
+- `applyPaperFilePatches` - the same just for per-file changes
 
-### Imports
-When adding new imports to a Vanilla class, use the fully qualified class name
-instead of adding a new import to the top of the file. If you are using a type a significant number of times, you
-can add an import with a comment. However, if it's only used a couple of times, the FQN is preferred to prevent future
-patch conflicts in the import section of the file.
+*Making per-file patches*
+- `fixupPaperFilePatches` - for making per-file patches for the paper source dir
 
+#### API Generator
+*Rebuilding* 
+- `rebuildPaperApiGeneratorFeaturePatches` - rebuilds feature patches for `paper-api-generator`
+- `rebuildPaperApiGeneratorFilePatches` - rebuilds per-file patches for `paper-api-generator`
 
-```java
-import net.minecraft.server.MinecraftServer;
-// don't add import here, use FQN like below
+*Applying*
+- `applyPaperApiGeneratorFeaturePatches` - applies feature patches to `paper-api-generator`
+- `applyPaperApiGeneratorFilePatches` - applies per-file patches to `paper-api-generator` 
 
-public class SomeVanillaClass {
-    public final org.bukkit.Location newLocation; // Paper - add location
-}
-```
+*Making per-file patches*
+- `fixupPaperApiGeneratorFilePatches` - for making per-file patches to the api generator
 
-### Nullability annotations
-
-We are in the process of switching nullability annotation libraries, so you might need to use one or the other:
-
-**For classes we add**: Fields, method parameters and return types that are nullable should be marked via the
-`@Nullable` annotation from `org.jspecify.annotations`. Whenever you create a new class, add `@NullMarked`, meaning types
-are assumed to be non-null by default. For less obvious placing such as on generics or arrays, see the [JSpecify docs](https://jspecify.dev/docs/user-guide/).
-
-**For other classes**: Keep using both `@Nullable` and `@NotNull` from `org.jetbrains.annotations`. These
-will be replaced later.
+**For a more thorough tasks list use `./gradlew tasks`**
 
 ## Access Transformers
 Sometimes, Vanilla code already contains a field, method, or type you want to access
@@ -276,115 +274,7 @@ to change the visibility or remove the final modifier from fields, methods, and 
 file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You can read about the format of ATs 
 [here](https://mcforge.readthedocs.io/en/latest/advanced/accesstransformers/#access-modifiers).
 
-<!--
-## Patch Notes
-
-When submitting feature patches to Paper, we may ask you to add notes to the patch
-header. While we do not require it for all changes, you should add patch notes
-when the changes you're making are technical, complex, or require an explanation
-of some kind. It is very likely that your patch will remain long after we've all
-forgotten about the details of your PR; patch notes will help us maintain it
-without having to dig back through GitHub history looking for your PR.
-
-These notes should express the intent of your patch, as well as any pertinent
-technical details we should keep in mind long-term. Ultimately, they exist to
-make it easier for us to maintain the patch across major version changes.
-
-If you add a message to your commit in the Vanilla source directory,
-the rebuild patches script will handle these patch notes
-automatically as part of generating the patch file. If you are not
-extremely careful, you should always just `squash` or `amend` a patch (see the
-above sections on modifying patches) and rebuild.
-
-Editing messages and patches by hand is possible, but you should patch and
-rebuild afterwards to make sure you did it correctly. This is slower than just
-modifying the patches properly after a few times, so you will not really gain
-anything but headaches from doing it by hand.
-
-Underneath is an example patch header/note:
-
-```patch
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Shane Freeder <theboyetronic@gmail.com>
-Date: Sun, 15 Oct 2017 00:29:07 +0100
-Subject: [PATCH] revert serverside behavior of keepalives
-
-This patch intends to bump up the time that a client has to reply to the
-server back to 30 seconds as per pre 1.12.2, which allowed clients
-more than enough time to reply potentially allowing them to be less
-temperamental due to lag spikes on the network thread, e.g. that caused
-by plugins that are interacting with netty.
-
-We also add a system property to allow people to tweak how long the server
-will wait for a reply. There is a compromise here between lower and higher
-values, lower values will mean that dead connections can be closed sooner,
-whereas higher values will make this less sensitive to issues such as spikes
-from networking or during connections flood of chunk packets on slower clients,
- at the cost of dead connections being kept open for longer.
-
-diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
-index a92bf8967..d0ab87d0f 100644
---- a/src/main/java/net/minecraft/server/PlayerConnection.java
-+++ b/src/main/java/net/minecraft/server/PlayerConnection.java
-```
--->
-
-## Obfuscation Helpers
-
-While rarely needed, obfuscation helpers are sometimes useful when it comes
-to unmapped local variables, or poorly named method parameters. In an effort
-to make future updates easier on ourselves, Paper tries to use obfuscation
-helpers wherever it makes sense. The purpose of these helpers is to make the
-code more readable and maintainable. These helpers should be made easy to
-inline by the JVM wherever possible.
-
-An example of an obfuscation helper for a local variable:
-```java
-double d0 = entity.getX(); final double fromX = d0; // Fork - OBFHELPER
-// ...   
-this.someMethod(fromX); // Fork
-```
-
-While they may not always be done in exactly the same way, the general goal is
-always to improve readability and maintainability. Use your best judgment and do
-what fits best in your situation.
-
-## Testing API changes
-
-### Using the Paper Test Plugin
-
-The Paper project has a `test-plugin` module for easily testing out API changes
-and additions. To use the test plugin, enable it in `test-plugin.settings.gradle.kts`,
-which will be generated after running Gradle at least once. After this, you can edit
-the test plugin, and run a server with the plugin using `./gradlew runDev` (or any
-of the other Paper run tasks).
-
-### Publishing to Maven local (use in external plugins)
-
-To build and install the Paper APIs and Server to your local Maven repository, do the following:
-
-- Run `./gradlew publishToMavenLocal` in the base directory.
-
-If you use Gradle to build your plugin:
-- Add `mavenLocal()` as a repository. Gradle checks repositories in the order they are declared,
-  so if you also have the Paper repository added, put the local repository above Paper's.
-- Make sure to remove `mavenLocal()` when you are done testing, see the [Gradle docs](https://docs.gradle.org/current/userguide/declaring_repositories.html#sec:case-for-maven-local)
-  for more details.
-
-If you use Maven to build your plugin:
-- If you later need to use the Paper-API, you might want to remove the jar
-  from your local Maven repository.  
-  If you use Windows and don't usually build using WSL, you might not need to
-  do this.
-
 ## Frequently Asked Questions
-
-### My commit doesn't need a build, what do I do?
-
-Quite simple: You add `[ci skip]` to the start of your commit subject.
-
-This case most often applies to changes to files like `README.md`, this very
-file (`CONTRIBUTING.md`), the `LICENSE.md` file, and so forth.
 
 ### Patching and building is *really* slow, what can I do?
 
