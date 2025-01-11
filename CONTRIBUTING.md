@@ -37,8 +37,10 @@ The changes to the original sources are split into the `paper-` directories and 
 
 In order to modify code other than minecraft itself (such as paper, spigot sources), you have to make the appropriate changes in the `paper-server` directory.
 For example if you were to want to modify Paper's config file, you would have to cd into `paper-server/src/main/java` and make your changes there, following it with rebuilding patches.
-Which you can do with the following command:
-- `./gradlew fixupPaperServerFilePatches` for a per-file patch, stored in `fork-server/paper-patches/files/(the classpath)`
+Which you can do with the following commands:
+- `./gradlew fixupPaperServerFilePatches`
+- `./gradlew rebuildPaperServerFilePatches` 
+For a per-file patch, stored in `fork-server/paper-patches/files/(the classpath)`
 
 To learn how to make a feature patch, please follow the guide further.
 
