@@ -6,6 +6,7 @@ The files of most importance are
 - `build.gradle.kts`
 - `settings.gradle.kts`
 - `gradle.properties`
+
 When updating upstream, be sure to keep the dependencies noted in build.gradle.kts in sync with upstream. It's also a good idea to use the same version of the Gradle wrapper and paperweight as upstream.
 
 Below you can find detailed info about the patch system's inner workings (based on a paper fork).
