@@ -1,7 +1,17 @@
-Creating a fork
+Paper ForkTest (creating a fork using paperweight)
 =====================
+This repo aims to be an example fork using paperweight, showcasing the patching system.
 
-## Requirements
+The files of most importance are
+- `build.gradle.kts`
+- `settings.gradle.kts`
+- `gradle.properties`
+When updating upstream, be sure to keep the dependencies noted in build.gradle.kts in sync with upstream. It's also a good idea to use the same version of the Gradle wrapper and paperweight as upstream.
+
+Below you can find detailed info about the patch system's inner workings (based on a paper fork).
+
+-----
+## Requirements to get started
 
 To get started with making changes, you'll need the following software, most of
 which can be obtained in (most) package managers such as `apt` (Debian / Ubuntu;
@@ -92,24 +102,26 @@ This is done by simply making the appropriate changes and rebuilding the file wi
 
 This is generally what you need to do when editing Minecraft files. 
 Making per-file patches is as easy as:
-1. Making your changes;
-2. Running `./gradlew fixupSourcePatches` in the root directory;
-3. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftSourcePatches`;
+1. Cd into the `fork-server/src/minecraft` dir;
+2. Making your changes;
+3. Running `./gradlew fixupSourcePatches` in the root directory;
+4. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftSourcePatches`;
 
 ## Creating and modifying (per-file) Paper-Server patches
 
 This is generally what you need to do when editing `paper-server` files.
 Making per-file patches is as easy as:
-1. Making your changes;
-2. Running `./gradlew fixupPaperServerFilePatches` in the root directory;
-3. If nothing went wrong, rebuilding patches with `./gradlew rebuildPaperServerFilePatches`;
+1. Cd into the `paper-server/src/main/java` dir;
+2. Making your changes;
+3. Running `./gradlew fixupPaperServerFilePatches` in the root directory;
+4. If nothing went wrong, rebuilding patches with `./gradlew rebuildPaperServerFilePatches`;
 
 ## Creating and modifying (per-file) Paper API patches
 
 This is generally what you need to do when you make small changes in the existing API.
-1. Cd into the `paper-api/src/main/java`
-2. Make your changes
-3. Run `./gradlew fixupPaperApiFilePatches`
+1. Cd into the `paper-api/src/main/java` dir;
+2. Make your changes;
+3. Run `./gradlew fixupPaperApiFilePatches`;
 4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`;
 
 ### Resolving rebase conflicts
