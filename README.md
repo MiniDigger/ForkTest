@@ -76,6 +76,7 @@ The API source sets look as follows:
 
 ## Understanding Patches
 
+#### Server sources
 Unlike adding new API, modifications to the existing source files are done through patches.
 These patches/extensions are split into different 5 (3+2) different sets in two directories depending on where the change was made, which are:
 `fork-server/minecraft-patches`
@@ -86,6 +87,15 @@ These patches/extensions are split into different 5 (3+2) different sets in two 
 `fork-server/paper-patches`
 - `files`: Per-file patches to non-minecraft classes such as `io/papermc/paper/PaperConfig`;
 - `features`: Larger feature patches that modify multiple non-minecraft classes.
+
+#### API sources
+Changes to existing APIs are done through patches, be that per-file or feature ones.
+These patches are seperated into one dir with two different sub-directories for file and feature patches.
+The structure looks like this:
+`fork-api/paper-patches`
+- `files`: Per-file patches to existing API classes, such as Paper api or Bukkit;
+- `features`: Larger feature patches that contain multiple changes to existing APIs.
+----
 
 Because this entire structure is based on patches and git, a basic understanding
 of how to use git is required. A basic tutorial can be found here:
