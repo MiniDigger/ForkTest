@@ -11,6 +11,8 @@ When updating upstream, be sure to keep the dependencies noted in build.gradle.k
 
 Below you can find detailed info about the patch system's inner workings (based on a paper fork).
 
+For info on how to upgrade forks see [Updating forks from 1.20.3 to hardfork](#updating-forks-from-1.20.3-to-hardfork).
+
 -----
 ## Requirements to get started
 
@@ -67,7 +69,7 @@ This doesn't require any additional steps such as patching/rebuilding patches.
 ## Understanding Patches
 
 Unlike adding new API, modifications to Minecraft source files are done through patches.
-These patches/extensions are split into different three different sets in two directories depending on where the change was made, which are:
+These patches/extensions are split into different 5 (3+2) different sets in two directories depending on where the change was made, which are:
 `fork-server/minecraft-patches`
 - `sources`: Per-file patches to Minecraft classes;
 - `resources`: Per-file patches to Minecraft data files;
@@ -125,7 +127,7 @@ This is generally what you need to do when you make small changes in the existin
 3. Run `./gradlew fixupPaperApiFilePatches`;
 4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`;
 
-### Resolving rebase conflicts
+### Resolving rebase conflicts (manual per-file patch method)
 If you run into conflicts while running `fixupSourcePatches` or the `fixupPaperApiFilePatches`, you need to go a more
 manual route:
 
@@ -290,6 +292,10 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 [here](https://mcforge.readthedocs.io/en/latest/advanced/accesstransformers/#access-modifiers).
 
 ## Frequently Asked Questions
+
+### Updating forks from 1.20.3 to hardfork
+
+Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
 
 ### Patching and building is *really* slow, what can I do?
 
