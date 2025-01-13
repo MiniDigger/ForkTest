@@ -296,6 +296,7 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 ### Updating forks from 1.20.3 to hardfork
 
 Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
+Also keep in mind that certain hunks of code need to be moved from those patches into paper feature patches as the source is seperated. Read the guide for more info on the new layout.
 
 ### Patching and building is *really* slow, what can I do?
 
