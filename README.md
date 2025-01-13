@@ -53,7 +53,7 @@ Which you can do with the following commands:
 - `./gradlew rebuildPaperServerFilePatches` 
 For a per-file patch, stored in `fork-server/paper-patches/files/(the classpath)`
 
-To learn how to make a feature patch, please follow the guide further.
+To make a feature patch you simply `git add .` in the `java` dir, commit using `git commit` and rebuild the patches. For more info please read the guide further
 
 To modify the API you have to make a distinction between API additions and API changes.
 The changes to the existing API should be done in the `paper-api/src/main/java` directory and later added in the root `paper-api` dir or in `paper-api/src/main/java` depending on if you want to have a feature patch or a per-file patch.
@@ -164,14 +164,14 @@ There is only a very small chance that you will have to use this system, but add
 such patches is very simple:
 
 To create feature patches for the server:
-1. Modify `fork-server/src/minecraft` or `paper-server/src/main/java` with the appropriate changes;
-1. Run `git add .` inside the root `fork-server` or `paper-server` directory to add your changes;
+1. Modify `fork-server/src/minecraft/java` or `paper-server/src/main/java` with the appropriate changes;
+1. Run `git add .` inside the `java` dir to add your changes;
 1. Run `git commit` with the desired patch message;
 1. Run `./gradlew rebuildAllServerPatches` in the root directory.
 
 To create feature patches for the api, the process is fairly similar:
 1. Modify `paper-api/src/main/java`
-1. Run `git add .` inside the root directory of `paper-api` to add your changes;
+1. Run `git add .` inside the `java` dir to add your changes;
 1. Run `git commit` with the desired patch message;
 1. Run `./gradlew rebuildPaperFeaturePatches` in the root directory.
 
