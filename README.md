@@ -6,6 +6,10 @@ The files of most importance are
 - `build.gradle.kts`
 - `settings.gradle.kts`
 - `gradle.properties`
+- `fork-server/build.gradle.kts.patch`
+- `fork-api/build.gradle.kts.patch`
+> [!TIP]
+> The `build.gradle.kts.patch` files are important because their changes allow for proper patching and compilation. It's important to patch them correctly as minor issues can cause patching errors!
 
 When updating upstream, be sure to keep the dependencies noted in build.gradle.kts in sync with upstream. It's also a good idea to use the same version of the Gradle wrapper and paperweight as upstream.
 
@@ -65,12 +69,12 @@ To rebuild all paper-api patches you can simply run:
 Changes to the API such as your own additions should be made in your fork's `fork-api/src/main/java` dir. 
 This doesn't require any additional steps such as patching/rebuilding patches.
 
-The server source sets are seperated into three main types:
+**The server source sets are seperated into three main types:**
 - `fork-server/src/main/java`: This contains your own code, such as your fork's config file. This doesn't touch vanilla code
 - `fork-server/src/minecraft`: These are the vanilla/modified by paper sources. This is where you'll most likely make changes.
 - `paper-server/src/main/java`: This directory contains all Paper related sources; such as Bukkit (please note there are some exceptions and some paper files appear in the minecraft source)
 
-The API source sets look as follows:
+**The API source sets look as follows:**
 - `fork-api/src/main/java`: Your own API code, this directory doesn't contain any code by default
 - `paper-api/src/main/java`: This is where you'll make changes to the existing API, whether that is to include your api in an existing one or adjust something
 
@@ -345,6 +349,10 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 
 Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
 Also keep in mind that certain hunks of code need to be moved from those patches into paper feature patches as the source is seperated. Read the guide for more info on the new layout.
+
+### I don't know how to fix my building errors!
+
+For help with using paperweight, you can join our [discord](https://discord.com/channels/289587909051416579/1078993196924813372)!
 
 ### Patching and building is *really* slow, what can I do?
 
