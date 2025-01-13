@@ -58,17 +58,25 @@ For a per-file patch, stored in `fork-server/paper-patches/files/(the classpath)
 To make a feature patch you simply `git add .` in the `java` dir, commit using `git commit` and rebuild the patches. For more info please read the guide further
 
 To modify the API you have to make a distinction between API additions and API changes.
-The changes to the existing API should be done in the `paper-api/src/main/java` directory and later added in the root `paper-api` dir or in `paper-api/src/main/java` depending on if you want to have a feature patch or a per-file patch.
+The changes to the existing API should be done in the `paper-api/src/main/java` directory and later added in `paper-api/src/main/java` and depending on if you want to have a feature patch or a per-file patch, use the appropriate methods.
 To rebuild all paper-api patches you can simply run:
 - `./gradlew rebuildPaperApiPatches`
 
 Changes to the API such as your own additions should be made in your fork's `fork-api/src/main/java` dir. 
 This doesn't require any additional steps such as patching/rebuilding patches.
 
+The server source sets are seperated into three main types:
+- `fork-server/src/main/java`: This contains your own code, such as your fork's config file. This doesn't touch vanilla code
+- `fork-server/src/minecraft`: These are the vanilla/modified by paper sources. This is where you'll most likely make changes.
+- `paper-server/src/main/java`: This directory contains all Paper related sources; such as Bukkit (please note there are some exceptions and some paper files appear in the minecraft source)
+
+The API source sets look as follows:
+- `fork-api/src/main/java`: Your own API code, this directory doesn't contain any code by default
+- `paper-api/src/main/java`: This is where you'll make changes to the existing API, whether that is to include your api in an existing one or adjust something
 
 ## Understanding Patches
 
-Unlike adding new API, modifications to Minecraft source files are done through patches.
+Unlike adding new API, modifications to the existing source files are done through patches.
 These patches/extensions are split into different 5 (3+2) different sets in two directories depending on where the change was made, which are:
 `fork-server/minecraft-patches`
 - `sources`: Per-file patches to Minecraft classes;
@@ -83,6 +91,7 @@ Because this entire structure is based on patches and git, a basic understanding
 of how to use git is required. A basic tutorial can be found here:
 <https://git-scm.com/docs/gittutorial>.
 
+
 Assuming you have already forked the repository:
 
 1. Clone your fork to your local machine;
@@ -94,21 +103,30 @@ On Windows, remove the `./` the beginning of `gradlew` commands, unless you are 
 `fork-server/src/minecraft` is not a git repositories in the traditional sense. Its
 initial commits are the decompiled and deobfuscated Minecraft source files. The per-file
 patches are applied on top of these files as a single, large commit, which is then followed
-by the individual feature-patch commits.
+by the individual feature-patch commits. 
 
 ## Modifying the build.gradle.kts files in the server and api dirs
 
 This is done by simply making the appropriate changes and rebuilding the file with:
 - `./gradlew rebuildPaperSingleFilePatches`
 
-## Creating and modifying (per-file) Minecraft patches
+## Creating and modifying (per-file) Minecraft `java` patches 
 
 This is generally what you need to do when editing Minecraft files. 
 Making per-file patches is as easy as:
-1. Cd into the `fork-server/src/minecraft` dir;
+1. Cd into the `fork-server/src/minecraft/java` dir;
 2. Making your changes;
-3. Running `./gradlew fixupSourcePatches` in the root directory;
+3. Running `./gradlew fixupMinecraftSourcePatches` in the root directory;
 4. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftSourcePatches`;
+
+## Creating and modifying (per-file) Minecraft `resources` patches
+
+This is generally what you need to do when editing Minecraft resource patches.
+Making per-file patches is as easy as:
+1. Cd into the `fork-server/src/minecraft/resources` dir;
+2. Making your changes;
+3. Running `./gradlew fixupMinecraftResourcePatches` in the root directory;
+4. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftResourcePatches`;
 
 ## Creating and modifying (per-file) Paper-Server patches
 
@@ -121,11 +139,11 @@ Making per-file patches is as easy as:
 
 ## Creating and modifying (per-file) Paper API patches
 
-This is generally what you need to do when you make small changes in the existing API.
+This is generally what you need to do when you make changes in the existing API.
 1. Cd into the `paper-api/src/main/java` dir;
 2. Make your changes;
 3. Run `./gradlew fixupPaperApiFilePatches`;
-4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`;
+4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`; **(this command also rebuilds the server file patches!)**
 
 ### Resolving rebase conflicts (manual per-file patch method)
 If you run into conflicts while running `fixupSourcePatches` or the `fixupPaperApiFilePatches`, you need to go a more
@@ -193,7 +211,7 @@ fixup method.
 
 #### Manual method
 
-**In order to run `git rebase -i base` you have to be in the java source directory and not in the root server/api dir!**
+**In order to run `git rebase -i base` you have to be in the java source (or resources) directory and not in the root server/api dir!**
 1. Make your changes;
 1. Make a temporary commit. You don't need to make a message for this;
 1. Type `git rebase -i base`, move (cut) your temporary commit and
@@ -232,6 +250,21 @@ fixup method.
 - `applyPaperSingleFilePatches` - Applies all paper single-file patches
 - `applyPaperFilePatches` - Applies all paperApi, paperApiGenerator, paper per-file patches
 - `applyPaperFeaturePatches` - Applies all paperApi, paperApiGenerator, paper feature patches
+- `applyMinecraftPatches` - Applies all Minecraft patches
+- `applyMinecraftResourcePatches` - Applies file patches to the Minecraft resources
+
+#### Running tasks
+- `runBundler` - Spins up a test server from the Mojang mapped bundler jar
+- `runDevServer` - Spins up a test server without assembling a jar
+- `runPaperclip` - Spins up a test server from the Mojang mapped Paperclip jar
+- `runServer` - Spins up a test server from the Mojang mapped server jar
+
+> [!CAUTION]
+> Reobf jars are unsupported and are not recommended unless in very specific settings
+- `runReobfBundler` - Spins up a test server from the reobf bundler jar
+- `runReobfPaperclip` - Spins up a test server from the reobf Paperclip jar
+- `runReobfServer` - Spins up a test server from the reobf bundler jar
+- `runReobfServer` - Spins up a test server from the reobfJar output jar
 
 #### Server tasks
 *Rebuilding*
@@ -241,6 +274,7 @@ fixup method.
 - `rebuildPaperServerFilePatches` - the same just for per-file changes
 - `rebuildMinecraftFeaturePatches` - rebuilds all minecraft feature patches
 - `rebuildMinecraftSourcePatches` - rebuilds all minecraft source patches
+- `rebuildMinecraftResourcePatches` - rebuilds all minecraft resource patches
 - `rebuildAllServerFeaturePatches` - this is used to rebuild all feature patches 
 - `rebuildAllServerFilePatches` - used to rebuild all per-file patches but not feature patches
 
@@ -251,12 +285,14 @@ fixup method.
 - `applyPaperServerFilePatches` - the same just for per-file changes
 - `applyMinecraftFeaturePatches` - applies all minecraft feature patches
 - `applyMinecraftSourcePatches` - applies all minecraft source patches
+- `applyMinecraftResourcePatches` - applies all minecraft resource patches
 - `applyAllServerFeaturePatches` - this is used to apply all feature patches 
 - `applyAllServerFilePatches` - used to apply all per-file patches but not feature patches
 
 *Making per-file patches*
-- `fixupMinecraftSourcePatches` - for making per-file patches for minecraft sources
-- `fixupPaperServerFilePatches` - for making per-file patches for the paper source dir
+- `fixupMinecraftSourcePatches` - for making per-file patches to minecraft `java` source
+- `fixupPaperServerFilePatches` - for making per-file patches to the paper source dir
+- `fixupMinecraftResourcePatches` - for making per-file patches to minecraft `resources` source
 
 #### API tasks
 *Rebuilding*
