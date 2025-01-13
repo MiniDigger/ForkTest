@@ -98,6 +98,7 @@ These patches/extensions are split into different 5 (3+2) different sets in two 
 Changes to existing APIs are done through patches, be that per-file or feature ones.
 These patches are seperated into one dir with two different sub-directories for file and feature patches.
 The structure looks like this:
+
 `fork-api/paper-patches`
 - `files`: Per-file patches to existing API classes, such as Paper api or Bukkit;
 - `features`: Larger feature patches that contain multiple changes to existing APIs.
@@ -259,6 +260,8 @@ fixup method.
 
 
 ## Tasks list
+> [!CAUTION]
+> Reobf jars are unsupported and are not recommended unless in very specific settings, you should not use the tasks containing `reobf` in their name.
 
 #### General tasks
 - `applyAllPatches` - Applies all patches
@@ -274,13 +277,16 @@ fixup method.
 - `runDevServer` - Spins up a test server without assembling a jar
 - `runPaperclip` - Spins up a test server from the Mojang mapped Paperclip jar
 - `runServer` - Spins up a test server from the Mojang mapped server jar
-
-> [!CAUTION]
-> Reobf jars are unsupported and are not recommended unless in very specific settings
 - `runReobfBundler` - Spins up a test server from the reobf bundler jar
 - `runReobfPaperclip` - Spins up a test server from the reobf Paperclip jar
 - `runReobfServer` - Spins up a test server from the reobf bundler jar
 - `runReobfServer` - Spins up a test server from the reobfJar output jar
+
+#### Bundling tasks
+- `createMojmapBundlerJar` - Builds a runnable bundler jar
+- `createMojmapPaperclipJar` - Builds a runnable paperclip jar
+- `createReobfBundlerJar` - Builds a runnable reobf bundler jar
+- `createReobfPaperclipJar` - Builds a runnable reobf paperclip jar
 
 #### Server tasks
 *Rebuilding*
@@ -350,7 +356,7 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
 Also keep in mind that certain hunks of code need to be moved from those patches into paper feature patches as the source is seperated. Read the guide for more info on the new layout.
 
-### I don't know how to fix my building errors!
+### I don't know how to fix my patching errors!
 
 For help with using paperweight, you can join our [discord](https://discord.com/channels/289587909051416579/1078993196924813372)!
 
