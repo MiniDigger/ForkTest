@@ -11,7 +11,7 @@ When updating upstream, be sure to keep the dependencies noted in build.gradle.k
 
 Below you can find detailed info about the patch system's inner workings (based on a paper fork).
 
-For info on how to upgrade forks see [Updating forks from 1.20.3 to hardfork](#updating-forks-from-1.20.3-to-hardfork).
+For info on how to upgrade forks see [Updating forks from 1.20.3 to hardfork](#updating-forks-from-1203-to-hardfork).
 
 -----
 ## Requirements to get started
