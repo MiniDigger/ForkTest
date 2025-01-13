@@ -79,11 +79,13 @@ The API source sets look as follows:
 #### Server sources
 Unlike adding new API, modifications to the existing source files are done through patches.
 These patches/extensions are split into different 5 (3+2) different sets in two directories depending on where the change was made, which are:
+
 `fork-server/minecraft-patches`
 - `sources`: Per-file patches to Minecraft classes;
 - `resources`: Per-file patches to Minecraft data files;
 - `features`: Larger feature patches that modify multiple Minecraft classes.
------
+
+  
 `fork-server/paper-patches`
 - `files`: Per-file patches to non-minecraft classes such as `io/papermc/paper/PaperConfig`;
 - `features`: Larger feature patches that modify multiple non-minecraft classes.
