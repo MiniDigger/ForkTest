@@ -56,10 +56,12 @@ In order to modify code other than minecraft itself (such as paper, spigot sourc
 For example if you were to want to modify Paper's config file, you would have to cd into `paper-server/src/main/java` and make your changes there, following it with rebuilding patches.
 Which you can do with the following commands:
 - `./gradlew fixupPaperServerFilePatches`
-- `./gradlew rebuildPaperServerFilePatches` 
+- `./gradlew rebuildPaperServerFilePatches`
+  
 For a per-file patch, stored in `fork-server/paper-patches/files/(the classpath)`
 
-To make a feature patch you simply `git add .` in the `java` dir, commit using `git commit` and rebuild the patches. For more info please read the guide further
+To make a feature patch you simply `git add .` in the correct dir `(java, resources)`, commit using `git commit` and rebuild the patches.
+For more info please read the guide further
 
 To modify the API you have to make a distinction between API additions and API changes.
 The changes to the existing API should be done in the `paper-api/src/main/java` directory and later added in `paper-api/src/main/java` and depending on if you want to have a feature patch or a per-file patch, use the appropriate methods.
@@ -70,7 +72,7 @@ Changes to the API such as your own additions should be made in your fork's `for
 This doesn't require any additional steps such as patching/rebuilding patches.
 
 **The server source sets are seperated into three main types:**
-- `fork-server/src/main/java`: This contains your own code, such as your fork's config file. This doesn't touch vanilla code
+- `fork-server/src/main/java`: This contains your own code, such as your fork's config file. This doesn't touch vanilla code and is empty by default
 - `fork-server/src/minecraft`: These are the vanilla/modified by paper sources. This is where you'll most likely make changes.
 - `paper-server/src/main/java`: This directory contains all Paper related sources; such as Bukkit (please note there are some exceptions and some paper files appear in the minecraft source)
 
@@ -115,7 +117,7 @@ Assuming you have already forked the repository:
 2. Type `./gradlew applyAllPatches` in a terminal to apply the patches.
 On Windows, remove the `./` the beginning of `gradlew` commands, unless you are using powershell;
 3. cd into `fork-server` or `paper-server` for server changes, and `paper-api` for existing API changes and or `fork-api` for new APIs.
-**Only changes made in `fork-server/src/minecraft`, `paper-server/src/main/java` and `paper-api/src/main/java` have to deal with the patch system.**
+**Only changes made in `fork-server/src/minecraft`, `paper-server/src/main/(java, resources)` and `paper-api/src/main/java` have to deal with the patch system.**
 
 `fork-server/src/minecraft` is not a git repositories in the traditional sense. Its
 initial commits are the decompiled and deobfuscated Minecraft source files. The per-file
@@ -130,41 +132,55 @@ This is done by simply making the appropriate changes and rebuilding the file wi
 ## Creating and modifying (per-file) Minecraft `java` patches 
 
 This is generally what you need to do when editing Minecraft files. 
-Making per-file patches is as easy as:
+To make per-file patches you simply need to:
 1. Cd into the `fork-server/src/minecraft/java` dir;
-2. Making your changes;
-3. Running `./gradlew fixupMinecraftSourcePatches` in the root directory;
-4. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftSourcePatches`;
+2. Make your changes;
+3. Run `./gradlew fixupMinecraftSourcePatches` in the root directory;
+4. If nothing went wrong, rebuild the patches with `./gradlew rebuildMinecraftSourcePatches`;
 
 ## Creating and modifying (per-file) Minecraft `resources` patches
 
 This is generally what you need to do when editing Minecraft resource patches.
-Making per-file patches is as easy as:
+To make per-file patches you simply need to:
 1. Cd into the `fork-server/src/minecraft/resources` dir;
-2. Making your changes;
-3. Running `./gradlew fixupMinecraftResourcePatches` in the root directory;
-4. If nothing went wrong, rebuilding patches with `./gradlew rebuildMinecraftResourcePatches`;
+2. Make your changes;
+3. Run `./gradlew fixupMinecraftResourcePatches` in the root directory;
+4. If nothing went wrong, rebuild patches with `./gradlew rebuildMinecraftResourcePatches`;
+
+## Creating and modifying (per-file) Paper `resources` patches
+
+This is generally what you need to do when editing Paper resource patches.
+Making per-file patches for Paper resources is a bit more complicated since you need to use `git rebase`:
+1. Cd into the `paper-server/src/main/resources` dir;
+2. Run `git rebase -i base` and select the first commit; for more info refer to [here](#resolving-rebase-conflicts-manual-per-file-patch-method)
+3. Make your changes;
+4. Run `git add .` and then commit using `git commit --amend`
+5. After you amend the commit, run `git rebase --continue`; If no errors occur you can proceed further, otherwise refer to [here](#resolving-rebase-conflicts-manual-per-file-patch-method)
+6. If nothing went wrong, rebuild the patches with `./gradlew rebuildPaperServerPatches` in the root directory;
 
 ## Creating and modifying (per-file) Paper-Server patches
 
 This is generally what you need to do when editing `paper-server` files.
-Making per-file patches is as easy as:
+To make per-file patches you simply need to:
 1. Cd into the `paper-server/src/main/java` dir;
-2. Making your changes;
-3. Running `./gradlew fixupPaperServerFilePatches` in the root directory;
-4. If nothing went wrong, rebuilding patches with `./gradlew rebuildPaperServerFilePatches`;
+2. Make your changes;
+3. Run `./gradlew fixupPaperServerFilePatches` in the root directory;
+4. If nothing went wrong, rebuild the patches with `./gradlew rebuildPaperServerFilePatches`;
 
 ## Creating and modifying (per-file) Paper API patches
 
 This is generally what you need to do when you make changes in the existing API.
+To make per-file patches you simply need to:
 1. Cd into the `paper-api/src/main/java` dir;
 2. Make your changes;
 3. Run `./gradlew fixupPaperApiFilePatches`;
 4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`; **(this command also rebuilds the server file patches!)**
 
 ### Resolving rebase conflicts (manual per-file patch method)
-If you run into conflicts while running `fixupSourcePatches` or the `fixupPaperApiFilePatches`, you need to go a more
+If you run into conflicts while running `fixupMinecraftSourcePatches`, `fixupMinecraftResourcePatches` or the `fixupPaperApiFilePatches`, you need to go a more
 manual route:
+
+If you encounter an issue while running git rebase, refer to [here](#i-tried-to-manually-modify-per-file-patches-but-i-cant-find-the-commit-I-only-have-a-noop-commit)
 
 This method works by temporarily resetting your `HEAD` to the desired commit to
 edit it using `git rebase`.
@@ -172,7 +188,7 @@ edit it using `git rebase`.
 0. If you have changes you are working on, type `git stash` to store them for
    later;
     - You can type `git stash pop` to get them back at any point.
-1. cd into `fork-server/src/minecraft/java` or `paper-server/src/main/java` or the api dirs and run `git rebase -i base`;
+1. cd into `fork-server/src/minecraft/(java, resources)` or `paper-server/src/main/java` or the `paper-api/src/main/java` dir and run `git rebase -i base`;
     - It should show something like
       [this](https://gist.github.com/zachbr/21e92993cb99f62ffd7905d7b02f3159) in
       the text editor you get.
@@ -187,7 +203,7 @@ edit it using `git rebase`.
 1. Run `git add .` to add your changes;
 1. Run `git commit --amend` to commit;
 1. Run `git rebase --continue` to finish rebasing;
-1. Run `./gradlew rebuildPaperFilePatches` in the root directory;
+1. Run `./gradlew rebuildAllServerPatches` in the root directory;
 
 ## Adding larger feature patches
 
@@ -195,7 +211,9 @@ Feature patches are exclusively used for large-scale changes that are hard to
 track and maintain and that can be optionally dropped, such as the more involved
 optimizations we have. This makes it easier to update the server during Minecraft updates,
 since we can temporarily drop these patches and reapply them later.
-Please note you can also use them when modifying paper-api for larger api changes.
+
+**Please note you can also use them when modifying paper-api for larger api changes.**
+**You can't use feature patches for minecraft `resources`, however they can be used for `paper-server/src/main/resources`**
 
 There is only a very small chance that you will have to use this system, but adding
 such patches is very simple:
@@ -212,12 +230,14 @@ To create feature patches for the api, the process is fairly similar:
 1. Run `git commit` with the desired patch message;
 1. Run `./gradlew rebuildPaperFeaturePatches` in the root directory.
 
-Your commit will be converted into a patch.
+Your commit will then be converted into a feature patch, stored in `(fork-api,fork-server)/(paper-patches,minecraft-patches)/features`.
 
 > ❗ Please note that if you have some specific implementation detail you'd like
 > to document, you should do so in the patch message *or* in comments.
 
 ## Modifying larger feature patches
+
+If you encounter an issue while running git rebase, refer to [here](#i-tried-to-manually-modify-per-file-patches-but-i-cant-find-the-commit-I-only-have-a-noop-commit)
 
 One way of modifying feature patches is to reset to the patch commit and follow
 the instructions from the [rebase section](#resolving-rebase-conflicts). If you
@@ -228,7 +248,6 @@ fixup method.
 
 #### Manual method
 
-**In order to run `git rebase -i base` you have to be in the java source (or resources) directory and not in the root server/api dir!**
 1. Make your changes;
 1. Make a temporary commit. You don't need to make a message for this;
 1. Type `git rebase -i base`, move (cut) your temporary commit and
@@ -359,6 +378,17 @@ Also keep in mind that certain hunks of code need to be moved from those patches
 ### I don't know how to fix my patching errors!
 
 For help with using paperweight, you can join our [discord](https://discord.com/channels/289587909051416579/1078993196924813372)!
+
+### I tried to manually modify per-file patches but i can't find the commit! I only have a noop commit
+
+This probably happened because you were running `git rebase` in the wrong directory (`fork-server` for example)
+**In order to run `git rebase -i base` you have to be in the java source (or resources) directory and not in the root server/api dir!**
+
+### How to modify the server logo?
+
+You can't patch the logo.png with file patches;
+You can do that however with feature ones, but there exists a better and simpler way;
+In order to modify the server logo, you have to add your own to the repo and change the reference to use its file name.
 
 ### Patching and building is *really* slow, what can I do?
 
