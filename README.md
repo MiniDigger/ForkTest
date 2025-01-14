@@ -205,7 +205,7 @@ To make per-file patches you simply need to:
 4. If nothing went wrong, rebuild patches with `./gradlew rebuildPaperFilePatches`; **(this command also rebuilds the server file patches!)**
 
 **The same applies to `Fork-API`, except replacing `PaperApi` with `ForkApi` in the tasks and dirs, and replacing the rebuild task to:**
-- `./gradlew rebuildForkFilePatches`
+- `./gradlew rebuildForkApiFilePatches`
 
 
 ### Resolving rebase conflicts (manual per-file patch method)
@@ -320,6 +320,10 @@ fixup method.
 - `applyPaperSingleFilePatches` - Applies all paper single-file patches
 - `applyPaperFilePatches` - Applies all paperApi, paperApiGenerator, paper per-file patches
 - `applyPaperFeaturePatches` - Applies all paperApi, paperApiGenerator, paper feature patches
+- `applyForkPatches` - Applies all forkApi, forkApiGenerator, fork single file patches
+- `applyForkSingleFilePatches` - Applies all fork single-file patches
+- `applyForkFilePatches` - Applies all forkApi, forkApiGenerator, fork per-file patches
+- `applyForkFeaturePatches` - Applies all forkApi, forkApiGenerator, fork feature patches
 - `applyMinecraftPatches` - Applies all Minecraft patches
 - `applyMinecraftResourcePatches` - Applies file patches to the Minecraft resources
 
@@ -345,6 +349,13 @@ fixup method.
 - `rebuildPaperServerPatches` - to only rebuild patches made to the `paper-server` source set
 - `rebuildPaperServerFeaturePatches` - the same as above but only feature patches
 - `rebuildPaperServerFilePatches` - the same just for per-file changes
+- `rebuildForkServerPatches` - to only rebuild patches made to the `fork-server` source set
+- `rebuildForkServerFeaturePatches` - the same as above but only feat
+- `rebuildForkServerFilePatches` - the same just for per-file changes
+- `rebuildForkMinecraftFilePatches` - rebuilds all fork Minecraft file patches
+- `rebuildForkMinecraftPatches` - rebuilds all fork Minecraft patches
+- `rebuildForkMinecraftResourcePatches` - rebuilds fork file patches to the Minecraft resources
+- `rebuildForkMinecraftSourcePatches` - rebuilds fork file patches to the Minecraft sources
 - `rebuildMinecraftFeaturePatches` - rebuilds all minecraft feature patches
 - `rebuildMinecraftSourcePatches` - rebuilds all minecraft source patches
 - `rebuildMinecraftResourcePatches` - rebuilds all minecraft resource patches
@@ -356,40 +367,58 @@ fixup method.
 - `applyPaperServerPatches` - to only apply patches made to the `paper-server` source set
 - `applyPaperServerFeaturePatches` - the same as above but only feature patches
 - `applyPaperServerFilePatches` - the same just for per-file changes
+- `applyForkServerPatches` - to only apply patches made to the `fork-server` source set
+- `applyForkServerFeaturePatches` - the same as above but only feat
+- `applyForkServerFilePatches` - the same just for per-file changes
+- `applyForkMinecraftFilePatches` - Applies all fork Minecraft file patches
+- `applyForkMinecraftPatches` - Applies all fork Minecraft patches
+- `applyForkMinecraftResourcePatches` - Applies fork file patches to the Minecraft resources
+- `applyForkMinecraftSourcePatches` - Applies fork file patches to the Minecraft sources
+- `applyForkPaperServerFeaturePatches` - Applies paperServer fork feature patches
+- `applyForkPaperServerFilePatches` - Applies paperServer fork file patches
+- `applyForkPaperServerFilePatchesFuzzy` - Applies paperServer fork file patches
+- `applyForkPaperServerPatches` - Applies all paperServer fork patches
 - `applyMinecraftFeaturePatches` - applies all minecraft feature patches
 - `applyMinecraftSourcePatches` - applies all minecraft source patches
 - `applyMinecraftResourcePatches` - applies all minecraft resource patches
 - `applyAllServerFeaturePatches` - this is used to apply all feature patches 
 - `applyAllServerFilePatches` - used to apply all per-file patches but not feature patches
 
+
 *Making per-file patches*
 - `fixupMinecraftSourcePatches` - for making per-file patches to minecraft `java` source
 - `fixupPaperServerFilePatches` - for making per-file patches to the paper source dir
+- `fixupForkServerFilePatches` - for making per-file patches to the fork source dir
 - `fixupMinecraftResourcePatches` - for making per-file patches to minecraft `resources` source
 
 #### API tasks
 *Rebuilding*
 - `rebuildPaperApiPatches` - rebuilds all patches made to `paper-api`
+- `rebuildForkApiPatches` - rebuilds all patches made to `fork-api`
 
 *Applying*
 - `applyPaperApiPatches` - applies all patches made to `paper-api`
 - `applyPaperFeaturePatches` - the same as above but only feature patches
 - `applyPaperFilePatches` - the same just for per-file changes
+- `applyForkApiPatches` - applies all patches made to `fork-api`
+- `applyForkFeaturePatches` - the same as above but only feature patches
+- `applyForkFilePatches` - the same just for per-file changes
 
 *Making per-file patches*
 - `fixupPaperFilePatches` - for making per-file patches for the paper source dir
+- `fixupForkFilePatches` - for making per-file patches for the fork source dir
 
 #### API Generator
 *Rebuilding* 
 - `rebuildPaperApiGeneratorFeaturePatches` - rebuilds feature patches for `paper-api-generator`
-- `rebuildPaperApiGeneratorFilePatches` - rebuilds per-file patches for `paper-api-generator`
+- `rebuildPaperApiGeneratorFilePatches` - rebuilds per-file patches for `paper-api-generator``
 
 *Applying*
 - `applyPaperApiGeneratorFeaturePatches` - applies feature patches to `paper-api-generator`
-- `applyPaperApiGeneratorFilePatches` - applies per-file patches to `paper-api-generator` 
+- `applyPaperApiGeneratorFilePatches` - applies per-file patches to `paper-api-generator`
 
 *Making per-file patches*
-- `fixupPaperApiGeneratorFilePatches` - for making per-file patches to the api generator
+- `fixupPaperApiGeneratorFilePatches` - for making per-file patches to the paper api generator
 
 **For a more thorough tasks list use `./gradlew tasks`**
 
@@ -404,7 +433,23 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 
 ### Updating forks from 1.20.3 to hardfork
 
-Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
+Unfortunately there isn't one single easy way to do this. 
+The simplest one would be to try and move all current patches to feature patches in the server dir, modify the build file like shown below, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
+
+In order to get the .rej files, you need to add the `rejectsFile = file("(set your dir here)")` property in the root `build.gradle.kts`
+
+The file can look something like this:
+```gradle
+        patchFile {
+            path = "paper-server/build.gradle.kts"
+            outputFile = file("fork-server/build.gradle.kts")
+            patchFile = file("fork-server/build.gradle.kts.patch")
+            rejectsFile = file("fork-server/rejects")
+        }
+```
+
+**Repeat that for every source set!**
+
 Also keep in mind that certain hunks of code need to be moved from those patches into paper feature patches as the source is seperated. Read the guide for more info on the new layout.
 
 ### I don't know how to fix my patching errors!
