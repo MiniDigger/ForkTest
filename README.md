@@ -83,7 +83,7 @@ This doesn't require any additional steps such as patching/rebuilding patches.
 **The server source sets are seperated into four main types:**
 - `forky-server/src/main/java`: This contains your own code, such as your fork's config file. This doesn't touch vanilla code and is empty by default
 - `forky-server/src/minecraft`: These are the vanilla/modified by paper sources. This is where you'll most likely make changes.
-- `forky-server/src/main/java`: This contains the upstream fork's code, such as its config file.
+- `fork-server/src/main/java`: This contains the upstream fork's code, such as its config file.
 - `paper-server/src/main/java`: This directory contains all Paper related sources; such as Bukkit (please note there are some exceptions and some paper files appear in the minecraft source)
 
 **The API source sets look as follows:**
