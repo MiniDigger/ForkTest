@@ -82,6 +82,11 @@ This doesn't require any additional steps such as patching/rebuilding patches.
 
 ## Understanding Patches
 
+Keep in mind that all file and resource patches are going to be stored in their respective classpath such as:
+- `fork-server/minecraft-patches/sources/net/minecraft/server/MinecraftServer.java.patch`
+  
+Feature patches are going to be stored normally.
+
 #### Server sources
 Unlike adding new API, modifications to the existing source files are done through patches.
 These patches/extensions are split into different 5 (3+2) different sets in two directories depending on where the change was made, which are:
@@ -105,6 +110,7 @@ The structure looks like this:
 - `files`: Per-file patches to existing API classes, such as Paper api or Bukkit;
 - `features`: Larger feature patches that contain multiple changes to existing APIs.
 ----
+
 
 Because this entire structure is based on patches and git, a basic understanding
 of how to use git is required. A basic tutorial can be found here:
@@ -382,15 +388,14 @@ For help with using paperweight, you can join our [discord](https://discord.com/
 ### I tried to manually modify per-file patches but i can't find the commit! I only have a noop commit
 
 This probably happened because you were running `git rebase` in the wrong directory (`fork-server` for example)
+
 **In order to run `git rebase -i base` you have to be in the java source (or resources) directory and not in the root server/api dir!**
 
 ### How to modify the server logo?
 
-You can't patch the logo.png with file patches;
+Sadly you can't patch the logo.png with file patches;
 
-You can do that however with feature ones, but there exists a better and simpler way;
-
-In order to modify the server logo, you have to add your own to the repo and change the reference to use its file name.
+You can do that however with feature patches, but there exists a better and simpler way which involves adding your own server logo to your fork and just changing the references to use it instead of the paper one.
 
 ### Patching and building is *really* slow, what can I do?
 
