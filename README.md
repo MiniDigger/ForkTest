@@ -378,7 +378,23 @@ file, you can add ATs that are applied when you `./gradlew applyAllPatches`. You
 
 ### Updating forks from 1.20.3 to hardfork
 
-Unfortunately there isn't one single easy way to do this. The simplest one would be to try and move all current patches to feature patches in the server dir, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
+Unfortunately there isn't one single easy way to do this. 
+The simplest one would be to try and move all current patches to feature patches in the server dir, modify the build file like shown below, apply (this should generate .rej files) and use the .rej files to manually apply those hunks to the source .java code.
+
+In order to get the .rej files, you need to add the `rejectsFile = file("(set your dir here)")` property in the root `build.gradle.kts`
+
+The file can look something like this:
+```gradle
+        patchFile {
+            path = "paper-server/build.gradle.kts"
+            outputFile = file("fork-server/build.gradle.kts")
+            patchFile = file("fork-server/build.gradle.kts.patch")
+            rejectsFile = file("fork-server/rejects")
+        }
+```
+
+**Repeat that for every source set!**
+
 Also keep in mind that certain hunks of code need to be moved from those patches into paper feature patches as the source is seperated. Read the guide for more info on the new layout.
 
 ### I don't know how to fix my patching errors!
