@@ -54,7 +54,7 @@ javac 21.0.5
 
 ## Understanding the source sets
 
-Unlike before, changes to the api and server are done through two different directories.
+Unlike before, changes to the api and server are done through three different directories.
 The changes to the original sources are split into the `paper-`, the `fork-` and `forky-` directories.
 
 In order to modify code other than minecraft itself (such as paper, spigot sources), you have to make the appropriate changes in the `paper-server` directory.
