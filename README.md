@@ -188,7 +188,7 @@ edit it using `git rebase`.
 0. If you have changes you are working on, type `git stash` to store them for
    later;
     - You can type `git stash pop` to get them back at any point.
-1. cd into `fork-server/src/minecraft/(java, resources)` or `paper-server/src/main/java` or the `paper-api/src/main/java` dir and run `git rebase -i base`;
+1. cd into `fork-server/src/minecraft/(java, resources)` or `paper-server/src/main/(java, resources)` or the `paper-api/src/main/java` dir and run `git rebase -i base`;
     - It should show something like
       [this](https://gist.github.com/zachbr/21e92993cb99f62ffd7905d7b02f3159) in
       the text editor you get.
@@ -387,7 +387,9 @@ This probably happened because you were running `git rebase` in the wrong direct
 ### How to modify the server logo?
 
 You can't patch the logo.png with file patches;
+
 You can do that however with feature ones, but there exists a better and simpler way;
+
 In order to modify the server logo, you have to add your own to the repo and change the reference to use its file name.
 
 ### Patching and building is *really* slow, what can I do?
