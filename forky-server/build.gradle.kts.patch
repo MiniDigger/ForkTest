@@ -1,13 +1,5 @@
 --- a/fork-server/build.gradle.kts
 +++ b/fork-server/build.gradle.kts
-@@ -22,6 +_,7 @@
-     // gitFilePatches = true
- 
-     val fork = forks.register("fork") {
-+        rootDirectory = upstreamsDirectory().map { it.dir("fork") }
-         upstream.patchDir("paperServer") {
-             upstreamPath = "paper-server"
-             excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
 @@ -30,7 +_,22 @@
          }
      }
@@ -30,9 +22,9 @@
 +
 +    activeFork = forky
  
-     paper {
-         paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
-@@ -120,10 +_,14 @@
+     spigot {
+         buildDataRef = "3edaf46ec1eed4115ce1b18d2846cded42577e42"
+@@ -116,10 +_,14 @@
      main {
          java { srcDir("../paper-server/src/main/java") }
          resources { srcDir("../paper-server/src/main/resources") }
@@ -47,7 +39,7 @@
      }
  }
  
-@@ -147,7 +_,7 @@
+@@ -143,7 +_,7 @@
  }
  
  dependencies {
